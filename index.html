@@ -4,8 +4,6 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>XO Game — IT Neon</title>
-  <!-- ฟอนต์สไตล์ไอที -->
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="styles.css" />
 </head>
@@ -15,21 +13,12 @@
   <main class="container">
     <header class="header">
       <h1 class="brand"><span class="angle">&lt;</span> XO <span class="accent">IT</span> <span class="angle">/&gt;</span></h1>
-      <div class="panel">
+      <div class="panel glass">
         <div class="status" id="status">เทิร์นของผู้เล่น <span class="p1">X</span></div>
-        <div class="scoreboard" aria-label="คะแนน">
-          <div class="score">
-            <span class="tag p1">X</span>
-            <span id="scoreX">0</span>
-          </div>
-          <div class="score">
-            <span class="tag p2">O</span>
-            <span id="scoreO">0</span>
-          </div>
-          <div class="score">
-            <span class="tag draw">=</span>
-            <span id="scoreD">0</span>
-          </div>
+        <div class="scoreboard">
+          <div class="score"><span class="tag p1">X</span><span id="scoreX">0</span></div>
+          <div class="score"><span class="tag p2">O</span><span id="scoreO">0</span></div>
+          <div class="score"><span class="tag draw">=</span><span id="scoreD">0</span></div>
         </div>
         <div class="actions">
           <button id="btnNewRound" class="btn">รีแมตช์</button>
@@ -38,12 +27,10 @@
       </div>
     </header>
 
-    <section class="board" id="board" role="grid" aria-label="ตาราง XO 3x3">
-      <!-- ช่อง 3x3 จะถูกสร้างโดย JS หรือจะวางมือก็ได้ -->
-    </section>
+    <section class="board" id="board"></section>
 
     <footer class="footer">
-      <p class="hint">ทิป: ใช้แป้นพิมพ์ <kbd>Tab</kbd> + <kbd>Enter</kbd> เพื่อเล่นได้</p>
+      <p class="hint">ทิป: แตะที่ช่องว่างเพื่อเล่น</p>
     </footer>
   </main>
 
