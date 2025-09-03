@@ -3,35 +3,31 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>XO Game — IT Neon</title>
-  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600;800&display=swap" rel="stylesheet">
+  <title>XO — Black & Pink</title>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="styles.css" />
 </head>
 <body>
-  <div class="scanlines"></div>
-
-  <main class="container">
-    <header class="header">
-      <h1 class="brand"><span class="angle">&lt;</span> XO <span class="accent">IT</span> <span class="angle">/&gt;</span></h1>
-      <div class="panel glass">
-        <div class="status" id="status">เทิร์นของผู้เล่น <span class="p1">X</span></div>
+  <main class="wrap">
+    <header class="top">
+      <h1 class="brand"><span>&lt;</span> XO <b>Pink</b> <span>/&gt;</span></h1>
+      <div class="panel">
+        <div id="status" class="status">ตาเดินของ <span class="p1">X</span></div>
         <div class="scoreboard">
           <div class="score"><span class="tag p1">X</span><span id="scoreX">0</span></div>
           <div class="score"><span class="tag p2">O</span><span id="scoreO">0</span></div>
           <div class="score"><span class="tag draw">=</span><span id="scoreD">0</span></div>
         </div>
         <div class="actions">
-          <button id="btnNewRound" class="btn">รีแมตช์</button>
-          <button id="btnReset" class="btn btn-ghost">รีเซ็ตสกอร์</button>
+          <button id="btnNewRound" class="btn">เล่นตาใหม่</button>
+          <button id="btnReset" class="btn ghost">รีเซ็ตสกอร์</button>
         </div>
       </div>
     </header>
 
-    <section class="board" id="board"></section>
+    <section id="board" class="board" role="grid" aria-label="ตาราง XO 3x3"></section>
 
-    <footer class="footer">
-      <p class="hint">ทิป: แตะที่ช่องว่างเพื่อเล่น</p>
-    </footer>
+    <footer class="foot">ทิป: ใช้ <kbd>Tab</kbd> + <kbd>Enter</kbd> ก็เล่นได้</footer>
   </main>
 
   <script src="app.js"></script>

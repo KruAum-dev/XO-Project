@@ -1,101 +1,107 @@
-const boardEl = document.getElementById("board");
-const statusEl = document.getElementById("status");
-const scoreXEl = document.getElementById("scoreX");
-const scoreOEl = document.getElementById("scoreO");
-const scoreDEl = document.getElementById("scoreD");
-const btnNewRound = document.getElementById("btnNewRound");
-const btnReset = document.getElementById("btnReset");
+// XO — Black & Pink
+const boardEl   = document.getElementById("board");
+const statusEl  = document.getElementById("status");
+const scoreXEl  = document.getElementById("scoreX");
+const scoreOEl  = document.getElementById("scoreO");
+const scoreDEl  = document.getElementById("scoreD");
+const btnNew    = document.getElementById("btnNewRound");
+const btnReset  = document.getElementById("btnReset");
 
-const WIN_LINES = [
+const WIN = [
   [0,1,2],[3,4,5],[6,7,8],
   [0,3,6],[1,4,7],[2,5,8],
   [0,4,8],[2,4,6]
 ];
 
-let state, current, locked, scores;
+let grid, turn, locked, scores;
 
 init();
 
 function init(){
+  // สร้างช่อง 3x3
   boardEl.innerHTML = "";
-  for (let i=0;i<9;i++){
-    const b = document.createElement("div");
-    b.className = "cell";
-    b.dataset.index = i;
-    b.addEventListener("click", ()=> playAt(i));
-    boardEl.appendChild(b);
+  for(let i=0;i<9;i++){
+    const c = document.createElement("button");
+    c.className = "cell";
+    c.dataset.i = i;
+    c.setAttribute("aria-label", `ช่องที่ ${i+1}`);
+    c.addEventListener("click", ()=> play(i));
+    c.addEventListener("keydown", e=>{
+      if(e.key==="Enter"||e.key===" "){ e.preventDefault(); play(i); }
+    });
+    boardEl.appendChild(c);
   }
-  state = Array(9).fill(null);
-  current = "X";
-  locked = false;
-  scores = { X:0, O:0, D:0 };
-  updateScoreUI();
-  updateTurnUI();
 
-  btnNewRound.addEventListener("click", newRound);
+  grid = Array(9).fill(null);
+  turn = "X";
+  locked = false;
+  scores = {X:0,O:0,D:0};
+  paintStatus();
+  paintScore();
+
+  btnNew.addEventListener("click", newRound);
   btnReset.addEventListener("click", resetAll);
 }
 
-function playAt(idx){
-  if(locked || state[idx]) return;
-  state[idx] = current;
-  const cell = boardEl.children[idx];
-  cell.classList.add(current.toLowerCase());
-  cell.textContent = current;
+function play(i){
+  if(locked || grid[i]) return;
+  grid[i] = turn;
+  const cell = boardEl.children[i];
+  cell.textContent = turn;
+  cell.classList.add(turn.toLowerCase());
 
-  const result = checkResult();
-  if(result){ handleResult(result); }
+  const res = judge();
+  if(res){ finish(res); }
   else {
-    current = current === "X" ? "O" : "X";
-    updateTurnUI();
+    turn = turn==="X" ? "O" : "X";
+    paintStatus();
   }
 }
 
-function checkResult(){
-  for(const [a,b,c] of WIN_LINES){
-    if(state[a] && state[a]===state[b] && state[a]===state[c]){
-      return {type:"win", player:state[a], line:[a,b,c]};
+function judge(){
+  for(const [a,b,c] of WIN){
+    if(grid[a] && grid[a]===grid[b] && grid[a]===grid[c]){
+      return {type:"win", player:grid[a], line:[a,b,c]};
     }
   }
-  if(state.every(v=>v!==null)) return {type:"draw"};
+  if(grid.every(v=>v!==null)) return {type:"draw"};
   return null;
 }
 
-function handleResult(res){
+function finish(res){
   locked = true;
   if(res.type==="win"){
     res.line.forEach(i=> boardEl.children[i].classList.add("win"));
     statusEl.innerHTML = `ผู้ชนะคือ <span class="win">${res.player}</span>`;
-    scores[res.player]++;
+    scores[res.player] += 1;
   }else{
     statusEl.innerHTML = `<span class="draw">เสมอ</span>`;
-    scores.D++;
+    scores.D += 1;
   }
-  updateScoreUI();
+  paintScore();
 }
 
-function updateTurnUI(){
-  statusEl.innerHTML = `เทิร์นของผู้เล่น <span class="${current==="X"?"p1":"p2"}">${current}</span>`;
+function paintStatus(){
+  statusEl.innerHTML = `ตาเดินของ <span class="${turn==='X'?'p1':'p2'}">${turn}</span>`;
 }
 
-function updateScoreUI(){
+function paintScore(){
   scoreXEl.textContent = scores.X;
   scoreOEl.textContent = scores.O;
   scoreDEl.textContent = scores.D;
 }
 
 function newRound(){
-  state.fill(null);
+  grid.fill(null);
   locked = false;
-  current = "X";
-  Array.from(boardEl.children).forEach(c=>{
-    c.textContent=""; c.className="cell";
-  });
-  updateTurnUI();
+  turn = "X";
+  Array.from(boardEl.children).forEach(c=>{ c.className="cell"; c.textContent=""; });
+  paintStatus();
+  boardEl.children[0].focus();
 }
 
 function resetAll(){
   scores = {X:0,O:0,D:0};
-  updateScoreUI();
+  paintScore();
   newRound();
 }
